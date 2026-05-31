@@ -1,7 +1,6 @@
 package com.game24.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.game24.R
 import com.game24.viewmodel.GameViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +49,7 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "24点计算器",
+                        text = stringResource(R.string.title_bar),
                         fontWeight = FontWeight.Bold,
                     )
                 },
@@ -64,9 +65,8 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 四个数字输入框
             Text(
-                text = "输入四个数字",
+                text = stringResource(R.string.prompt_enter_numbers),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -95,7 +95,6 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // 计算按钮
             Button(
                 onClick = { viewModel.calculate() },
                 enabled = !state.isLoading,
@@ -108,16 +107,15 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
                         strokeWidth = 2.dp,
                     )
                 } else {
-                    Text(text = "计  算", fontSize = 18.sp)
+                    Text(text = stringResource(R.string.btn_calculate), fontSize = 18.sp)
                 }
             }
 
-            // 错误提示
             if (state.error != null) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
                     text = state.error!!,
-                    color = if (state.error!!.startsWith("无解"))
+                    color = if (state.isNoSolution)
                         MaterialTheme.colorScheme.onSurfaceVariant
                     else
                         MaterialTheme.colorScheme.error,
@@ -125,11 +123,10 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
                 )
             }
 
-            // 结果统计
             if (state.results.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "共找到 ${state.results.size} 种解法",
+                    text = stringResource(R.string.label_solution_count, state.results.size),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.primary,
                 )
@@ -137,7 +134,6 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // 结果列表
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -164,7 +160,6 @@ private fun ResultCard(index: Int, expression: String) {
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            // 序号
             Text(
                 text = "#$index",
                 style = MaterialTheme.typography.labelMedium,
@@ -172,7 +167,6 @@ private fun ResultCard(index: Int, expression: String) {
                 modifier = Modifier.width(32.dp),
                 fontWeight = FontWeight.Bold,
             )
-            // 表达式
             Text(
                 text = "$expression = 24",
                 style = MaterialTheme.typography.bodyLarge.copy(

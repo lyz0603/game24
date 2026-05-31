@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">24点计算器</string>
+
+    <!-- UI -->
+    <string name="title_bar">24点计算器</string>
+    <string name="prompt_enter_numbers">输入四个数字</string>
+    <string name="btn_calculate">计算</string>
+    <string name="label_solution_count">共找到 %d 种解法</string>
+
+    <!-- 错误 -->
+    <string name="error_invalid_number">请输入有效的整数</string>
+    <string name="error_need_four">请输入四个数字</string>
+    <string name="error_no_solution">无解——这四个数字无法算出 24</string>
 </resources>

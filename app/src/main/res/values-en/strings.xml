@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">24 Points Solver</string>
+    <string name="title_bar">24 Points</string>
+    <string name="prompt_enter_numbers">Enter four numbers</string>
+    <string name="btn_calculate">Calculate</string>
+    <string name="label_solution_count">Found %d solutions</string>
+    <string name="error_invalid_number">Please enter valid integers</string>
+    <string name="error_need_four">Please enter four numbers</string>
+    <string name="error_no_solution">No solution — these numbers cannot make 24</string>
+</resources>

@@ -1,7 +1,9 @@
 package com.game24.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.game24.R
 import com.game24.engine.Solver
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,9 +16,10 @@ data class GameUiState(
     val results: List<String> = emptyList(),
     val isLoading: Boolean = false,
     val error: String? = null,
+    val isNoSolution: Boolean = false,
 )
 
-class GameViewModel : ViewModel() {
+class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(GameUiState())
     val uiState: StateFlow<GameUiState> = _uiState.asStateFlow()
@@ -29,17 +32,18 @@ class GameViewModel : ViewModel() {
 
     fun calculate() {
         val raw = _uiState.value.inputNumbers
+        val ctx = getApplication<Application>()
 
         // 校验输入
         val numbers = raw.map { it.trim().toIntOrNull() }
         if (numbers.any { it == null }) {
-            _uiState.update { it.copy(error = "请输入有效的整数") }
+            _uiState.update { it.copy(error = ctx.getString(R.string.error_invalid_number)) }
             return
         }
 
         val nums = numbers.filterNotNull()
         if (nums.size != 4) {
-            _uiState.update { it.copy(error = "请输入四个数字") }
+            _uiState.update { it.copy(error = ctx.getString(R.string.error_need_four)) }
             return
         }
 
@@ -52,7 +56,8 @@ class GameViewModel : ViewModel() {
                 it.copy(
                     isLoading = false,
                     results = results,
-                    error = if (results.isEmpty()) "无解——这四个数字无法算出 24" else null,
+                    error = if (results.isEmpty()) ctx.getString(R.string.error_no_solution) else null,
+                    isNoSolution = results.isEmpty(),
                 )
             }
         }
