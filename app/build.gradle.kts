@@ -15,8 +15,8 @@ android {
         applicationId = "com.game24"
         minSdk = 24
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.1.0"
+        versionCode = 3
+        versionName = "1.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,6 +36,16 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+
+    // 按 ABI 拆分为独立 APK
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a", "armeabi-v7a", "x86_64", "x86")
+            isUniversalApk = true // 也保留一个通用包
+        }
     }
 }
 
